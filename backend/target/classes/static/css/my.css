@@ -1,0 +1,30 @@
+.error {
+    color: red;
+}
+
+.success {
+    color: #54c543;
+}
+
+.dropdown a:hover
+{
+    background-color: #3682ea;
+    color: white;
+}
+
+table {
+    color: white;
+}
+
+
+.form-control {
+    color: white;
+}
+
+
+.form-check-input:disabled {
+    pointer-events: none; !important;
+}
+
+
+
