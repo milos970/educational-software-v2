@@ -4,7 +4,6 @@ package com.milos.numeric.services.methods;
 import org.hibernate.AssertionFailure;
 import org.mariuszgromada.math.mxparser.*;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
