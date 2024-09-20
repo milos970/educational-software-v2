@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.milos.numeric.dtos.NewPasswordDto;
 import com.milos.numeric.parameters.NonLinear;
+import com.milos.numeric.services.methods.ApproximationMethods;
 import com.milos.numeric.services.methods.NewtonMethod;
 import com.milos.numeric.validators.DecimalValid;
 import jakarta.validation.ConstraintViolation;
@@ -83,6 +84,18 @@ public class NewPasswordDtoTest {
         assertEquals(Double.NaN, NewtonMethod.bisection("lg(x)", 0.001, 2.0, 3.0), 0.00001);
         assertEquals(0.7391, NewtonMethod.bisection("cos(x) - x", 0.0001, 0, 1.0), 0.0001);*/
     }
+
+
+    @Test
+    public void testApproximationMethods()
+    {
+        System.out.println(ApproximationMethods.lagrange(new double[]{-2,10,-1,4,1,6,2,3}));
+        System.out.println(ApproximationMethods.newton(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
+        System.out.println(ApproximationMethods.leastSquares(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
+    }
+
+
+
 
 
     @Test
