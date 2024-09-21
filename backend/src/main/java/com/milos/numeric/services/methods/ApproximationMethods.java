@@ -1,15 +1,21 @@
 package com.milos.numeric.services.methods;
 
 import org.decimal4j.util.DoubleRounder;
+import org.hibernate.AssertionFailure;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApproximationMethods
+public final class ApproximationMethods
 {
     private static final int ROUND = 3;
     private static final DecimalFormat format = new DecimalFormat("0.#");
+
+
+    private ApproximationMethods() {
+        throw new AssertionError();
+    }
     public static String lagrange(double[] nodes)
     {
 

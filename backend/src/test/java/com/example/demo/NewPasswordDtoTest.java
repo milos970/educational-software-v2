@@ -3,6 +3,7 @@ package com.example.demo;
 import com.milos.numeric.dtos.NewPasswordDto;
 import com.milos.numeric.parameters.NonLinear;
 import com.milos.numeric.services.methods.ApproximationMethods;
+import com.milos.numeric.services.methods.IntegrationMethods;
 import com.milos.numeric.services.methods.NewtonMethod;
 import com.milos.numeric.validators.DecimalValid;
 import jakarta.validation.ConstraintViolation;
@@ -89,9 +90,13 @@ public class NewPasswordDtoTest {
     @Test
     public void testApproximationMethods()
     {
-        System.out.println(ApproximationMethods.lagrange(new double[]{-2,10,-1,4,1,6,2,3}));
+        /*System.out.println(ApproximationMethods.lagrange(new double[]{-2,10,-1,4,1,6,2,3}));
         System.out.println(ApproximationMethods.newton(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
         System.out.println(ApproximationMethods.leastSquares(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
+*/
+        System.out.println(IntegrationMethods.trapezoidal("e^x", -1, 1, 4));
+
+        System.out.println(IntegrationMethods.simpson("e^x", -1, 1, 4));
     }
 
 

@@ -11,11 +11,12 @@ public final class NewtonMethod
 {
     private static final int ITERATIONS = 1000;
 
-    private NewtonMethod() {
-        throw new AssertionFailure("afsd");
+    private NewtonMethod()
+    {
+        throw new AssertionError();
     }
 
-    private static void prerekvizita() {
+    public static void prerekvizita() {
         boolean isCallSuccessful = License.iConfirmNonCommercialUse("John Doe");
 
         /* Verification if use type has been already confirmed */
