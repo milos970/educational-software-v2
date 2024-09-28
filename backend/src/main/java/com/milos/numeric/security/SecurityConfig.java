@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
+import org.springframework.security.ldap.authentication.BindAuthenticator;
+import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
+import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -62,7 +66,7 @@ public class SecurityConfig
                         .requestMatchers(mvcMatcherAdmin.pattern("/employee/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
                         .requestMatchers(mvcMatcherStudent.pattern("/student/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAuthority('STUDENT')"))
 
-                        .anyRequest().authenticated()
+                        .anyRequest().fullyAuthenticated()
                 ).headers(headers -> headers.frameOptions().disable())
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).disable())
@@ -72,7 +76,9 @@ public class SecurityConfig
 
                 .permitAll())
                 .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"))
-                .authenticationManager(authManager(http));
+               ;
+
+        http.authenticationProvider(ldapAuthenticationProvider());
 
 
         return http.build();
@@ -82,29 +88,27 @@ public class SecurityConfig
 
 
     @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService( userDetailsService());
-        authProvider.setPasswordEncoder(encoder());
-        return authProvider;
+    LdapAuthenticationProvider ldapAuthenticationProvider() {
+        return new LdapAuthenticationProvider(authenticator());
     }
 
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception
-    {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(authProvider());
-        return authenticationManagerBuilder.build();
-    }
+    BindAuthenticator authenticator() {
 
+        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=groups", "(uid={0})", contextSource());
+        BindAuthenticator authenticator = new BindAuthenticator(contextSource());
+        authenticator.setUserSearch(search);
+        return authenticator;
+    }
 
     @Bean
-    public UserDetailsService userDetailsService()
-    {
-        return new MyDatabaseUserDetailsService();
+    public DefaultSpringSecurityContextSource contextSource() {
+        DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource("ldap://localhost:8389/dc=springframework,dc=org");
+        dsCtx.setUserDn("uid={0},ou=people");
+        return dsCtx;
     }
+
 
     @Bean
     public PasswordEncoder encoder()
