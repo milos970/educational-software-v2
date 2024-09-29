@@ -20,10 +20,10 @@ public class EmailServiceImpl
     @Value("${spring.mail.username}")
     private String sourceEmail;
 
-    @Value("${server.ip}")
+
     private String serverIp;
 
-    @Value("${server.port}")
+
     private String serverPort;
 
 

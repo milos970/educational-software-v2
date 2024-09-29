@@ -1,16 +1,11 @@
 package com.milos.numeric.security;
 
 
-import com.milos.numeric.services.MyDatabaseUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
@@ -35,7 +30,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 public class SecurityConfig
 {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+   /* public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
         MvcRequestMatcher.Builder mvcMatcherBuilderB = new MvcRequestMatcher.Builder(introspector);
         MvcRequestMatcher.Builder mvcMatcherBuilderC = new MvcRequestMatcher.Builder(introspector);
@@ -75,15 +70,24 @@ public class SecurityConfig
                 .loginPage("/login")
 
                 .permitAll())
-                .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"))
-               ;
+                .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
 
         http.authenticationProvider(ldapAuthenticationProvider());
 
 
         return http.build();
-    }
+    }*/
 
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .authorizeHttpRequests()
+                .anyRequest().fullyAuthenticated()
+                .and()
+                .formLogin();
+        http.authenticationProvider(ldapAuthenticationProvider());
+        return http.build();
+    }
 
 
 
@@ -96,7 +100,7 @@ public class SecurityConfig
     @Bean
     BindAuthenticator authenticator() {
 
-        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=groups", "(uid={0})", contextSource());
+        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people", "(uid={0})", contextSource());
         BindAuthenticator authenticator = new BindAuthenticator(contextSource());
         authenticator.setUserSearch(search);
         return authenticator;
@@ -104,9 +108,7 @@ public class SecurityConfig
 
     @Bean
     public DefaultSpringSecurityContextSource contextSource() {
-        DefaultSpringSecurityContextSource dsCtx = new DefaultSpringSecurityContextSource("ldap://localhost:8389/dc=springframework,dc=org");
-        dsCtx.setUserDn("uid={0},ou=people");
-        return dsCtx;
+        return new DefaultSpringSecurityContextSource("ldap://localhost:8389/dc=springframework,dc=org");
     }
 
 
