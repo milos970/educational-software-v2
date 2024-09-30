@@ -16,12 +16,12 @@ import java.util.Optional;
 public class MyDatabaseUserDetailsService implements UserDetailsService
 {
     @Autowired
-    private PersonalInfoRepository personalInfoRepository;
+    private PersonalInfoService personalInfoService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        Optional<PersonalInfo> optional = this.personalInfoRepository.findByUsername(username);
+        Optional<PersonalInfo> optional = this.personalInfoService.findByUsername(username);
 
         if (optional.isEmpty())
         {

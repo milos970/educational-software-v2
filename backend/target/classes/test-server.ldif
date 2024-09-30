@@ -38,3 +38,13 @@ cn: Jožko Mrkvička
 sn: Mrkvička
 uid: mrkvicka5
 userPassword: mrkvicka5
+
+dn: uid=student5,ou=students,ou=people, dc=springframework,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Miloš Lukáčik
+sn: Lukáčik
+uid: student5
+userPassword: student5

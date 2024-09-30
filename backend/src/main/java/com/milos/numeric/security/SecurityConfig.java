@@ -1,11 +1,18 @@
 package com.milos.numeric.security;
 
 
+import com.milos.numeric.services.MyDatabaseUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
@@ -21,6 +28,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -29,7 +37,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 public class SecurityConfig
 {
-    @Bean
+
    /* public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
         MvcRequestMatcher.Builder mvcMatcherBuilderB = new MvcRequestMatcher.Builder(introspector);
@@ -78,27 +86,41 @@ public class SecurityConfig
         return http.build();
     }*/
 
+    @Autowired
+    private  MyDatabaseUserDetailsService userDetailsService;
+
+    @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests()
-                .anyRequest().fullyAuthenticated()
-                .and()
+                .authenticationManager(customAuthenticationManager()) // Použitie vlastného AuthenticationManager
+                .authorizeHttpRequests((authz) -> authz
+                        .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
+                )
                 .formLogin();
-        http.authenticationProvider(ldapAuthenticationProvider());
         return http.build();
     }
 
 
+    public AuthenticationManager customAuthenticationManager()
+    {
+        return new CustomAuthenticationManager(Arrays.asList(ldapAuthenticationProvider(), customAuthenticationProvider()));
+    }
+
+
+    public AuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(this.userDetailsService);
+    }
+
 
     @Bean
-    LdapAuthenticationProvider ldapAuthenticationProvider() {
+    public LdapAuthenticationProvider ldapAuthenticationProvider() {
         return new LdapAuthenticationProvider(authenticator());
     }
 
 
     @Bean
-    BindAuthenticator authenticator() {
+    public BindAuthenticator authenticator() {
 
         FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people", "(uid={0})", contextSource());
         BindAuthenticator authenticator = new BindAuthenticator(contextSource());
