@@ -29,15 +29,15 @@ sn: Gábrišová
 uid: lydia1
 userPassword: lydia1
 
-dn: uid=mrkvicka5,ou=students,ou=people, dc=springframework,dc=org
+dn: uid=ema.mrkvickova,ou=students,ou=people, dc=springframework,dc=org
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: Jožko Mrkvička
 sn: Mrkvička
-uid: mrkvicka5
-userPassword: mrkvicka5
+uid: ema.mrkvickova
+userPassword: ema.mrkvickova
 
 dn: uid=student5,ou=students,ou=people, dc=springframework,dc=org
 objectClass: top

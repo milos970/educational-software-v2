@@ -86,8 +86,6 @@ public class SecurityConfig
         return http.build();
     }*/
 
-    @Autowired
-    private  MyDatabaseUserDetailsService userDetailsService;
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -109,7 +107,7 @@ public class SecurityConfig
 
 
     public AuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(this.userDetailsService);
+        return new CustomAuthenticationProvider(userDetailsService());
     }
 
 
@@ -150,6 +148,13 @@ public class SecurityConfig
     public AuthenticationSuccessHandler authenticationSuccessHandler()
     {
         return new CustomAuthenticationSuccessHandler();
+    }
+
+
+    @Bean
+    public UserDetailsService userDetailsService()
+    {
+        return new MyDatabaseUserDetailsService();
     }
 
 
