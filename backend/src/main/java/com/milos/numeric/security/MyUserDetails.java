@@ -50,7 +50,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.personalInfo.getPassword();
+        return null;
     }
 
     @Override

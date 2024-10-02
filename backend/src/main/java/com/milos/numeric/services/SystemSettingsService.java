@@ -7,7 +7,6 @@ import com.milos.numeric.dtos.NewDateDto;
 import com.milos.numeric.dtos.NewTeacherDto;
 import com.milos.numeric.entities.Employee;
 import com.milos.numeric.entities.SystemSettings;
-import com.milos.numeric.entities.VerificationToken;
 import com.milos.numeric.repositories.SystemSettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,16 +25,14 @@ public class SystemSettingsService
     private final SystemSettingsRepository systemSettingsRepository;
     private final EmployeeService employeeService;
     private final DateParser dateParser;
-    private final VerificationTokenService verificationTokenService;
 
 
     @Autowired
-    public SystemSettingsService(SystemSettingsRepository systemSettingsRepository, EmployeeService employeeService, DateParser dateParser, VerificationTokenService verificationTokenService)
+    public SystemSettingsService(SystemSettingsRepository systemSettingsRepository, EmployeeService employeeService, DateParser dateParser)
     {
         this.systemSettingsRepository = systemSettingsRepository;
         this.employeeService = employeeService;
         this.dateParser = dateParser;
-        this.verificationTokenService = verificationTokenService;
     }
 
 
@@ -63,44 +59,6 @@ public class SystemSettingsService
     }
 
 
-    @Scheduled(cron = "0 * * * * *")
-    public boolean deleteExpiratedTokens()
-    {
-
-        if (this.verificationTokenService.count() == 0)
-        {
-            return true;
-        }
-
-        List<VerificationToken> list = this.verificationTokenService.findAll();
-
-        for (VerificationToken item : list)
-        {
-            LocalDateTime exp = this.dateParser.parseStringToLocalDate(item.getExpirationDate());
-            int daysDifference = Math.abs((int) ChronoUnit.MINUTES.between(exp, LocalDateTime.now()));
-
-
-        }
-
-        Optional<SystemSettings> optional = this.systemSettingsRepository.findFirst();
-
-        if (optional.isEmpty())
-        {
-            return false;
-        }
-
-        SystemSettings systemSettings = optional.get();
-        LocalDateTime deadline = this.dateParser.parseStringToLocalDate(systemSettings.getClassDate());
-        LocalDateTime now = this.dateParser.formatLocalDateInFormat(LocalDateTime.now());
-
-        int daysDifference = Math.abs((int) ChronoUnit.DAYS.between(deadline, now));
-
-        daysDifference = Math.abs(daysDifference);
-        systemSettings.setNumberOfDays(daysDifference);
-        this.systemSettingsRepository.save(systemSettings);
-
-        return true;
-    }
 
 
     @Scheduled(cron = "0 * * * * *")

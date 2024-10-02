@@ -1,7 +1,5 @@
 package com.milos.numeric.controllers;
 
-import com.milos.numeric.Authority;
-import com.milos.numeric.dtos.NewPasswordDto;
 import com.milos.numeric.dtos.PersonalInfoDto;
 import com.milos.numeric.email.EmailServiceImpl;
 import com.milos.numeric.entities.*;
@@ -14,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,18 +30,17 @@ public class PageController {
 
     private final SystemSettingsService systemSettingsService;
 
-    private final ChatService chatService;
+
 
 
     @Autowired
-    public PageController(PersonalInfoService personalInfoService, StudentService studentService, EmployeeService employeeService, EmailServiceImpl emailService, MaterialService materialService, SystemSettingsService systemSettingsService, ChatService chatService) {
+    public PageController(PersonalInfoService personalInfoService, StudentService studentService, EmployeeService employeeService, EmailServiceImpl emailService, MaterialService materialService, SystemSettingsService systemSettingsService) {
         this.personalInfoService = personalInfoService;
         this.studentService = studentService;
         this.employeeService = employeeService;
         this.emailService = emailService;
         this.materialService = materialService;
         this.systemSettingsService = systemSettingsService;
-        this.chatService = chatService;
     }
 
     @GetMapping("student/schedule/page")
@@ -119,28 +115,7 @@ public class PageController {
         return "pages/main/system";
     }
 
-    @GetMapping("reset-password")
-    public String resetPasswordPage(Model model) {
-        model.addAttribute("newPasswordDto", new NewPasswordDto());
-        return "update-password";
-    }
 
-    @GetMapping("person/password/update/page")
-    public String updatePasswordPage(Model model) {
-        model.addAttribute("newPasswordDto", new NewPasswordDto());
-        return "pages/alt/change-password";
-    }
-
-
-    @GetMapping("confirm/sign-up/page")
-    public ModelAndView confirmSignUpPage() {
-
-        ModelAndView modelAndView = new ModelAndView();
-
-        modelAndView.setViewName("pages/alt/confirmation");
-
-        return modelAndView;
-    }
 
 
 
@@ -244,64 +219,7 @@ public class PageController {
         return "pages/alt/sign-in";
     }
 
-    @GetMapping("forget-password-page")
-    public String forgetPassword()
-    {
-        return "pages/alt/forgot-password";
-    }
 
-    @GetMapping("person/chat/page")
-    public String chatPage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-
-        String username = myUserDetails.getUsername();
-        Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
-
-        if (optionalPersonalInfo.isEmpty()) {
-
-        }
-
-        PersonalInfo personalInfo = optionalPersonalInfo.get();
-
-        model.addAttribute("personalInfo", personalInfo);
-
-
-
-        if (personalInfo.getAuthority() == Authority.TEACHER) {
-
-
-            List<Student> students = this.studentService.findAll();
-            if (students.isEmpty()) {
-
-            }
-            model.addAttribute("students", students);
-
-
-        } else {
-
-            Optional<Chat> optionalChat = this.chatService.findByChatId(this.personalInfoService.findUsernameByAuthorityTeacher().get(), personalInfo.getUsername());
-            model.addAttribute("teacher", this.personalInfoService.findUsernameByAuthorityTeacher().get());
-            if (optionalChat.isEmpty()) {
-
-            }
-
-            if (optionalChat.get().getMessages().isEmpty()) {
-
-            }
-            Chat chat = optionalChat.get();
-
-            model.addAttribute("chat", chat);
-        }
-
-
-        if (personalInfo.getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
-
-
-        return "pages/main/chat";
-    }
 
 
     @GetMapping("sign-up/page")

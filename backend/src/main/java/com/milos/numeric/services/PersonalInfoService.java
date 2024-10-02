@@ -6,21 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.milos.numeric.Authority;
 import com.milos.numeric.Domain;
 import com.milos.numeric.Gender;
-import com.milos.numeric.dtos.NewPasswordDto;
-import com.milos.numeric.dtos.NewTeacherDto;
 import com.milos.numeric.dtos.PersonalInfoDto;
 import com.milos.numeric.email.EmailServiceImpl;
-
 import com.milos.numeric.entities.PersonalInfo;
-
-import com.milos.numeric.mappers.PersonalInfoNewPasswordDTOMapper;
-import com.milos.numeric.mappers.PersonalInfoNewPersonDTOMapper;
 import com.milos.numeric.repositories.PersonalInfoRepository;
-import com.milos.numeric.validators.EmployeeEmailValidator;
-import com.milos.numeric.validators.StudentEmailValidator;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import jakarta.mail.MessagingException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PersonalInfoService
@@ -49,7 +42,6 @@ public class PersonalInfoService
 
     private final  PasswordEncoder passwordEncoder;
 
-    private final VerificationTokenService verificationTokenService;
 
 
 
@@ -58,13 +50,12 @@ public class PersonalInfoService
 
 
     @Autowired
-    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService, PasswordEncoder passwordEncoder, VerificationTokenService verificationTokenService) {
+    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService, PasswordEncoder passwordEncoder) {
         this.personalInfoRepository = personalInfoRepository;
         this.systemSettingsService = systemSettingsService;
         this.validator = validator;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
-        this.verificationTokenService = verificationTokenService;
 
     }
 
@@ -80,58 +71,6 @@ public class PersonalInfoService
     }
 
 
-
-
-
-
-    public boolean generatePassword(String username)
-    {
-        Optional<PersonalInfo> optional = this.personalInfoRepository.findByUsername(username);
-
-        if (optional.isEmpty())
-        {
-            return false;
-        }
-
-        PersonalInfo personalInfo = optional.get();
-
-        String generatedPassword = UUID.randomUUID() + "M#1";
-        String hashedPassword = this.passwordEncoder.encode(generatedPassword);
-        personalInfo.setPassword(hashedPassword);
-
-        try {
-            this.emailService.sendPassword(personalInfo.getEmail(),generatedPassword);
-        } catch (MessagingException | UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        this.personalInfoRepository.save(personalInfo);
-        return true;
-    }
-
-
-
-    public boolean updatePassword(String username, NewPasswordDto newPasswordDto)
-    {
-        String newPassword = newPasswordDto.getNewPassword();
-        String newHashedPassword = this.passwordEncoder.encode(newPassword);
-
-        Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoRepository.findByUsername(username);
-
-
-        if (optionalPersonalInfo.isEmpty())
-        {
-            return false;
-        }
-
-        PersonalInfo personalInfo = optionalPersonalInfo.get();
-        personalInfo.setPassword(newHashedPassword);
-
-        this.personalInfoRepository.save(personalInfo);
-        return true;
-
-    }
 
 
     public Optional<PersonalInfo> findByAuthority(Authority authority)
@@ -197,10 +136,6 @@ public class PersonalInfoService
         personalInfo.setPersonalNumber(personalInfoDTO.getPersonalNumber());
         personalInfo.setEmail(personalInfoDTO.getEmail());
 
-        String password = personalInfoDTO.getPassword();
-
-        String hashedPassword = this.passwordEncoder.encode(password);
-        personalInfo.setPassword(hashedPassword);
 
         String email = personalInfoDTO.getEmail();
         String emailDomain = email.substring(email.indexOf("@") + 1);
@@ -292,7 +227,6 @@ public class PersonalInfoService
             person.setName(name);
             person.setSurname(surname);
             person.setEmail(email);
-            person.setPassword(UUID.randomUUID() + "M#1");
             this.createPerson(person);
         }
 

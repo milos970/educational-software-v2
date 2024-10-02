@@ -1,11 +1,8 @@
 package com.example.demo;
 
-import com.milos.numeric.dtos.NewPasswordDto;
 import com.milos.numeric.parameters.NonLinear;
-import com.milos.numeric.services.methods.ApproximationMethods;
 import com.milos.numeric.services.methods.IntegrationMethods;
 import com.milos.numeric.services.methods.NewtonMethod;
-import com.milos.numeric.validators.DecimalValid;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

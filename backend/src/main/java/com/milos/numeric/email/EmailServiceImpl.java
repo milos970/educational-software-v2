@@ -1,6 +1,5 @@
 package com.milos.numeric.email;
 
-import com.milos.numeric.entities.VerificationToken;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +39,7 @@ public class EmailServiceImpl
         this.sendEmail(email,"Obnovenie hesla",content);
     }
 
-    public void sendVerificationEmail(VerificationToken token) throws MessagingException, UnsupportedEncodingException
-    {
-        String content = "Pre verifikovanie emailu kliknite na následujúci link: "  +serverIp + ":" + serverPort + "/confirm-email?token="+token.getCode();
-        this.sendEmail(token.getPersonalInfo().getEmail(),"Verifikácia emailu",content);
-    }
+   
 
 
     private void sendEmail(String destinationEmail, String subject, String content) throws MessagingException, UnsupportedEncodingException
