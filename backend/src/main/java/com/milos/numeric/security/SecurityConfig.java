@@ -87,23 +87,26 @@ public class SecurityConfig
     }*/
 
 
+
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+        MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
 
         http
                 .authenticationManager(customAuthenticationManager()) // Použitie vlastného AuthenticationManager
-                .authorizeHttpRequests((authz) -> authz
+                .authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/failure")).permitAll()
                         .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
                 )
-                .formLogin();
+                .formLogin().failureHandler(authenticationFailureHandler()).successHandler(authenticationSuccessHandler());
         return http.build();
     }
 
 
     public AuthenticationManager customAuthenticationManager()
     {
-        return new CustomAuthenticationManager(Arrays.asList(ldapAuthenticationProvider(), customAuthenticationProvider()));
+        return new CustomAuthenticationManager(Arrays.asList(ldapAuthenticationProvider(),customAuthenticationProvider()));
     }
+
 
 
     public AuthenticationProvider customAuthenticationProvider() {

@@ -16,21 +16,13 @@ public class CustomAuthenticationFailureHandler  implements AuthenticationFailur
 
 
     private final SimpleUrlAuthenticationFailureHandler wrongCredentials =
-            new SimpleUrlAuthenticationFailureHandler("/login");
+            new SimpleUrlAuthenticationFailureHandler("/failure");
 
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException
     {
-
-
-        if (exception instanceof BadCredentialsException)
-        {
-
-            HttpSession session = request.getSession();
-            session.setAttribute("error", "Nesprávne prihlasovacie údaje!");
-            this.wrongCredentials.onAuthenticationFailure(request, response, exception);
-        }
-
+        System.out.println(5654656);
+        this.wrongCredentials.onAuthenticationFailure(request, response, exception);
     }
 }

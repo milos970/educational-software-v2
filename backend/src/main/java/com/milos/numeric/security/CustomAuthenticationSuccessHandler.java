@@ -13,7 +13,7 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     SimpleUrlAuthenticationSuccessHandler personSuccessHandler =
-            new SimpleUrlAuthenticationSuccessHandler("/person/home/page");
+            new SimpleUrlAuthenticationSuccessHandler("/success");
 
 
 
@@ -22,6 +22,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException
     {
+        System.out.println("Success");
         this.personSuccessHandler.onAuthenticationSuccess(request, response, authentication);
     }
 }

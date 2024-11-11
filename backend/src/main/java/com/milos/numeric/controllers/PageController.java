@@ -43,6 +43,21 @@ public class PageController {
         this.systemSettingsService = systemSettingsService;
     }
 
+
+
+    @GetMapping("/success")
+    @ResponseBody
+    public String success() {
+        return "SUCCESS!";
+    }
+
+
+    @GetMapping("/failure")
+    @ResponseBody
+    public String failure() {
+        return "FAILURE!";
+    }
+
     @GetMapping("student/schedule/page")
     public String studentSchedulePage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
         String username = myUserDetails.getUsername();
@@ -205,11 +220,6 @@ public class PageController {
     }
 
 
-    @GetMapping("/")
-    @ResponseBody
-    public String getLoginPage() {
-        return "You have successfully logged in Using Spring Security LDAP Authentication!";
-    }
 
 
 
@@ -237,32 +247,7 @@ public class PageController {
 
 
 
-    @GetMapping("person/home/page")
-    public String homePage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-        String username = myUserDetails.getUsername();
-        Optional<PersonalInfo> personalInfoOptional = this.personalInfoService.findByUsername(username);
 
-        if (personalInfoOptional.isEmpty()) {
-
-        }
-
-        PersonalInfo personalInfo = personalInfoOptional.get();
-
-
-        model.addAttribute("personalInfo", personalInfo);
-        model.addAttribute("ipAddress", "sdf");
-        model.addAttribute("port", "sfd");
-
-
-        if (personalInfo.getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
-
-
-        return "index";
-    }
 
 
 

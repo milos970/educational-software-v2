@@ -17,23 +17,20 @@ public class CustomAuthenticationManager implements AuthenticationManager
         this.authenticationProviders = authenticationProviders;
     }
 
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Authentication result = null;
 
-        for (AuthenticationProvider provider : authenticationProviders) {
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException
+    {
+        Authentication result = null;
+        for (AuthenticationProvider provider : this.authenticationProviders)
+        {
             try {
                 result = provider.authenticate(authentication);
-                if (result != null && result.isAuthenticated()) {
-                    System.out.println("Autentifikovaný cez poskytovateľa: " + provider.getClass().getSimpleName());
-                }
-            } catch (BadCredentialsException e) {
-
-                System.out.println("Zlyhaná autentifikácia cez poskytovateľa: " + provider.getClass().getSimpleName());
+            } catch (Exception e)
+            {
+                System.out.println("FAILED!!!!!");
+                return null;
             }
-        }
-
-        if (result == null || !result.isAuthenticated()) {
-            throw new BadCredentialsException("Autentifikácia zlyhala na všetkých poskytovateľoch");
         }
 
         return result;
