@@ -26,6 +26,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider
     {
         String username = authentication.getName();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if (userDetails == null) {
+            System.out.println("Nieje študentom predmetu!");
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
+
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 

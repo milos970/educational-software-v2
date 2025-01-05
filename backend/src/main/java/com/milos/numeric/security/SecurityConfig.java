@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
@@ -31,10 +33,10 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig
 {
 
@@ -88,41 +90,79 @@ public class SecurityConfig
 
 
 
-    @Bean
+
+
+    /*@Bean
     protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
 
         http
-                .authenticationManager(customAuthenticationManager()) // Použitie vlastného AuthenticationManager
                 .authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/failure")).permitAll()
                         .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
                 )
-                .formLogin().failureHandler(authenticationFailureHandler()).successHandler(authenticationSuccessHandler());
+                .formLogin().failureHandler(authenticationFailureHandler()).successHandler(authenticationSuccessHandler())
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationManager(customAuthenticationManager())
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }*/
+
+
+    /*@Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+        MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
+        MvcRequestMatcher.Builder mvcMatcherAdmin = new MvcRequestMatcher.Builder(introspector);
+        MvcRequestMatcher.Builder mvcMatcherStudent = new MvcRequestMatcher.Builder(introspector);
+
+        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/failure")).permitAll()
+                        .requestMatchers(mvcMatcherAdmin.pattern("/employee/**"))
+                        .access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
+                        .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
+                ) .authenticationManager(customAuthenticationManager());
+
+        return http.build();
+    }*/
+
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+        http.csrf().disable().authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .authenticationProvider(customAuthenticationProvider()
+                );
+        http.httpBasic();
         return http.build();
     }
 
 
-    public AuthenticationManager customAuthenticationManager()
+
+
+
+    /*public AuthenticationManager customAuthenticationManager()
     {
         return new CustomAuthenticationManager(Arrays.asList(ldapAuthenticationProvider(),customAuthenticationProvider()));
-    }
+    }*/
 
 
 
-    public AuthenticationProvider customAuthenticationProvider() {
+    public AuthenticationProvider customAuthenticationProvider()
+    {
         return new CustomAuthenticationProvider(userDetailsService());
     }
 
 
     @Bean
-    public LdapAuthenticationProvider ldapAuthenticationProvider() {
+    public LdapAuthenticationProvider ldapAuthenticationProvider()
+    {
         return new LdapAuthenticationProvider(authenticator());
     }
 
 
     @Bean
-    public BindAuthenticator authenticator() {
-
+    public BindAuthenticator authenticator()
+    {
         FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people", "(uid={0})", contextSource());
         BindAuthenticator authenticator = new BindAuthenticator(contextSource());
         authenticator.setUserSearch(search);

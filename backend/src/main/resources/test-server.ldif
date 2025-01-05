@@ -34,7 +34,7 @@ objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: Jožko Mrkvička
+cn: Ema Mrkvičkova
 sn: Mrkvička
 uid: ema.mrkvickova
 userPassword: ema.mrkvickova
@@ -44,7 +44,7 @@ objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: Miloš Lukáčik
-sn: Lukáčik
+cn: Student
+sn: Student
 uid: student5
 userPassword: student5

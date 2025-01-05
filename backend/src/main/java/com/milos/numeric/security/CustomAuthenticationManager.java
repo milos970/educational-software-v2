@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
-@Component
+
 public class CustomAuthenticationManager implements AuthenticationManager
 {
     private final List<AuthenticationProvider> authenticationProviders;
@@ -21,9 +21,11 @@ public class CustomAuthenticationManager implements AuthenticationManager
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
+        System.out.println("MANAGER");
         Authentication result = null;
         for (AuthenticationProvider provider : this.authenticationProviders)
         {
+
             try {
                 result = provider.authenticate(authentication);
             } catch (Exception e)
