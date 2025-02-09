@@ -40,7 +40,6 @@ public class PersonalInfoService
 
     private final EmailServiceImpl emailService;
 
-    private final  PasswordEncoder passwordEncoder;
 
 
 
@@ -50,13 +49,11 @@ public class PersonalInfoService
 
 
     @Autowired
-    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService, PasswordEncoder passwordEncoder) {
+    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService) {
         this.personalInfoRepository = personalInfoRepository;
         this.systemSettingsService = systemSettingsService;
         this.validator = validator;
         this.emailService = emailService;
-        this.passwordEncoder = passwordEncoder;
-
     }
 
     public Optional<String> findUsernameByAuthorityTeacher()//OK
@@ -129,13 +126,10 @@ public class PersonalInfoService
             return Optional.empty();
         }
 
-
         PersonalInfo personalInfo = new PersonalInfo();
         personalInfo.setName(personalInfoDTO.getName());
         personalInfo.setSurname(personalInfoDTO.getSurname());
-        personalInfo.setPersonalNumber(personalInfoDTO.getPersonalNumber());
         personalInfo.setEmail(personalInfoDTO.getEmail());
-
 
         String email = personalInfoDTO.getEmail();
         String emailDomain = email.substring(email.indexOf("@") + 1);
@@ -150,18 +144,15 @@ public class PersonalInfoService
             personalInfo.setGender(Gender.FEMALE);
         }
 
-
         String username = personalInfoDTO.getEmail().substring(0,personalInfo.getEmail().indexOf("@"));
         personalInfo.setUsername(username);
         personalInfo.setEnabled(false);
-
 
         if (emailDomain.equals("gmail.com"))
         {
 
             if (this.personalInfoRepository.count() == 0)
             {
-
                 personalInfo.setAuthority(Authority.TEACHER);
 
             } else {

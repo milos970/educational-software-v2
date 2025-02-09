@@ -60,34 +60,6 @@ public class SystemSettingsService
 
 
 
-
-    @Scheduled(cron = "0 * * * * *")
-    public boolean incrementDays()
-    {
-
-        Optional<SystemSettings> optional = this.systemSettingsRepository.findFirst();
-
-        if (optional.isEmpty())
-        {
-            return false;
-        }
-
-        SystemSettings systemSettings = optional.get();
-        LocalDateTime deadline = this.dateParser.parseStringToLocalDate(systemSettings.getClassDate());
-        LocalDateTime now = this.dateParser.formatLocalDateInFormat(LocalDateTime.now());
-        int daysDifference = Math.abs((int) ChronoUnit.DAYS.between(deadline, now));
-
-        daysDifference = Math.abs(daysDifference);
-        systemSettings.setNumberOfDays(daysDifference);
-        this.systemSettingsRepository.save(systemSettings);
-
-        return true;
-    }
-
-
-
-
-
     public boolean updateAbsents(NewAbsentsDto newAbsentsDto)
     {
         Optional<SystemSettings> optional = this.systemSettingsRepository.findFirst();
@@ -104,35 +76,6 @@ public class SystemSettingsService
 
         return true;
     }
-
-    public boolean updateDate(NewDateDto newDateDto)
-    {
-        Optional<SystemSettings> optionalSystemSettings = this.systemSettingsRepository.findFirst();
-
-        if (optionalSystemSettings.isEmpty())
-        {
-
-            return false;
-        }
-
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        Date date = null;
-        try {
-            date = inputFormat.parse(newDateDto.getDate());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        SystemSettings systemSettings = optionalSystemSettings.get();
-        systemSettings.setClassDate(newDateDto.getDate());
-
-        this.systemSettingsRepository.save(systemSettings);
-
-        this.incrementDays();
-        return true;
-    }
-
 
 
 

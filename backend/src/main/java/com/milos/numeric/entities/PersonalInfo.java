@@ -37,10 +37,6 @@ public class PersonalInfo
     @Size(max = 50, message = "PersonalInfo username is more than 50 characters long!")
     private String username;
 
-    @Column(unique = true, name = "personal_number")
-    @Size(min = 5, max = 6, message = "PersonalInfo pin length is not between 5 and 6 characters!")
-    private String personalNumber;
-
     @Email
     @Column(unique = true)
     private String email;

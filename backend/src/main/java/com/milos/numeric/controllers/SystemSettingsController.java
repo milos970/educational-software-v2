@@ -34,28 +34,8 @@ public class SystemSettingsController {
     }
 
 
-    @PatchMapping("admin/system/update/official-date")
-    public ResponseEntity updateOfficialClassDate(@RequestBody @Valid NewDateDto newDateDto)
-    {
-        if (this.systemSettingsService.updateDate(newDateDto)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PatchMapping("admin/system/update/date")
-    public ResponseEntity updateClassDate(@RequestBody @Valid NewDateDto newDateDto)
-    {
-        if (this.systemSettingsService.updateDate(newDateDto)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else
-        {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
 
-    }
 
 
     @PatchMapping("admin/system/update/teacher")

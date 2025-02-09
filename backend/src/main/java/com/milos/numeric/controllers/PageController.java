@@ -47,11 +47,10 @@ public class PageController {
 
     @GetMapping("/home")
     @ResponseBody
-    public String home(@AuthenticationPrincipal UserDetails userDetails)
+    public String home()
     {
-        return "Hello " + userDetails.getUsername();
+        return "WELCOME";
     }
-
 
 
     @GetMapping("/success")

@@ -1,11 +1,26 @@
-insert into personal_info (id,name,surname,username, personal_number, email, gender, authority, enabled)
-values (0,'Ema','Mrkvičková','ema.mrkvickova', '56478', 'ema.mrkvičkova@fri.uniza.sk','FEMALE','TEACHER', true);
+INSERT INTO personal_info (id, name, surname, username,  email, gender, authority, enabled)
+SELECT 0, 'Lýdia', 'Gábrišová', 'lydia.gabrisova', 'lydia.gabrisova@fri.uniza.sk', 'FEMALE', 'TEACHER', true
+    WHERE NOT EXISTS (
+    SELECT 1 FROM personal_info WHERE username = 'lydia.gabrisova'
+);
 
-insert into personal_info (id,name,surname,username, personal_number, email,  gender, authority, enabled)
-values (5,'Zuzana','Malá','zuzana.mala', '12345', 'zuzana.mala@fri.uniza.sk', 'FEMALE','EMPLOYEE', true);
+insert into personal_info (id,name,surname,username,  email,  gender, authority, enabled)
+values (3,'Miloš','Lukáčik','milos.lukacik', 'lukacik.milos@fri.uniza.sk', 'MALE','EMPLOYEE', true);
 
-insert into employee (id, person_id) values (225, 5);
-insert into employee (id, person_id) values (222, 0);
+insert into personal_info (id,name,surname,username, email, gender, authority, enabled)
+values (1,'Anna','Kamenčáková','kamencakova1', 'kamencakova1@stud.uniza.sk','FEMALE','STUDENT', true);
 
-insert into system_settings(id,allowed_absents, employee_id, class_date, number_of_days, uploaded_file)
-values (0,2,222,'28.12.2024 14:15',0,false);
+insert into personal_info (id,name,surname,username,  email,  gender, authority, enabled)
+values (2,'Zbyňo','Kamenčák','kamencak2', 'kamencak2@stud.uniza.sk', 'MALE','STUDENT', true);
+
+insert into student (id, points, absents, person_id) values (0, 0,0,1);
+insert into student (id, points, absents, person_id) values (1, 0,0,2);
+
+insert into employee (id, person_id) values (0, 0);
+insert into employee (id, person_id) values (1, 3);
+
+insert into system_settings(id,allowed_absents, employee_id, uploaded_file)
+values (0,2,0,false);
+
+
+

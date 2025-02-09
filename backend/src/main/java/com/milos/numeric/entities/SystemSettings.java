@@ -1,6 +1,5 @@
 package com.milos.numeric.entities;
 
-import com.milos.numeric.validators.DateValid;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,15 +29,6 @@ public class SystemSettings
     @OneToOne(targetEntity = Employee.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
-    @DateValid
-    @Column(name = "class_date")
-    private String classDate;
-
-    @Column(name = "number_of_days")
-    @Min(value = 0, message = "Value is less than 0!")
-    @Max(value = 365, message = "Value is more than 365!")
-    private int numberOfDays;
 
 
     @Column(name = "uploaded_file")

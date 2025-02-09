@@ -19,32 +19,43 @@ objectClass: top
 objectClass: organizationalUnit
 ou: employees
 
-dn: uid=lydia1,ou=employees, ou=people, dc=springframework,dc=org
+dn: uid=lydia.gabrisova,ou=employees, ou=people, dc=springframework,dc=org
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
 cn: Lýdia Gábrišová
 sn: Gábrišová
-uid: lydia1
-userPassword: lydia1
+uid: lydia.gabrisova
+userPassword: lydia.gabrisova
 
-dn: uid=ema.mrkvickova,ou=students,ou=people, dc=springframework,dc=org
+dn: uid=milos.lukacik,ou=employees, ou=people, dc=springframework,dc=org
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: Ema Mrkvičkova
-sn: Mrkvička
-uid: ema.mrkvickova
-userPassword: ema.mrkvickova
+cn: Miloš Lukáčik
+sn: Lukáčik
+uid: milos.lukacik
+userPassword: milos.lukacik
 
-dn: uid=student5,ou=students,ou=people, dc=springframework,dc=org
+
+dn: uid=kamencak2,ou=students,ou=people, dc=springframework,dc=org
 objectClass: top
 objectClass: person
 objectClass: organizationalPerson
 objectClass: inetOrgPerson
-cn: Student
-sn: Student
-uid: student5
-userPassword: student5
+cn: Zbyňo Kamenčák
+sn: Kamenčák
+uid: kamencak2
+userPassword: kamencak2
+
+dn: uid=lukacik5,ou=students,ou=people, dc=springframework,dc=org
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: Miloš Lukáčik
+sn: Lukáčik
+uid: lukacik5
+userPassword: lukacik5
