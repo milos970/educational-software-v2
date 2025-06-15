@@ -1,4 +1,4 @@
-package com.milos.numeric.services.methods;
+package com.milos.numeric.services.methods.integration;
 
 import org.mariuszgromada.math.mxparser.Function;
 
@@ -10,7 +10,7 @@ public final class IntegrationMethods
 
     public static double trapezoidal(String expression, double a, double b, int n)
     {
-        NewtonMethod.prerekvizita();
+        Methods.prerekvizita();
         final double h = (b - a) / n;
 
 
@@ -51,7 +51,7 @@ public final class IntegrationMethods
 
     public static double simpson(String expression, double a, double b, int n)
     {
-        NewtonMethod.prerekvizita();
+        Methods.prerekvizita();
         final double h = (b - a) / n;
 
         Function f = new Function("f(x) = " + expression);

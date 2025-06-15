@@ -1,11 +1,7 @@
 package com.example.demo;
 
-import com.milos.numeric.dtos.NewPasswordDto;
 import com.milos.numeric.parameters.NonLinear;
-import com.milos.numeric.services.methods.ApproximationMethods;
-import com.milos.numeric.services.methods.IntegrationMethods;
-import com.milos.numeric.services.methods.NewtonMethod;
-import com.milos.numeric.validators.DecimalValid;
+import com.milos.numeric.services.methods.integration.IntegrationMethods;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -39,25 +35,25 @@ public class NewPasswordDtoTest {
     public void testNewtonMethod()
     {
         double a = 2.547455454545455445454545454545344545465464545453434343435421233544545434345435454343545435435435;
-        double res  = Double.valueOf(NewtonMethod.newtonMethod("10cos(x - 1) - x ^2 + 2x -1", 0.001,2.4).getLast()[0]);
+        double res  = Double.valueOf(Methods.newtonMethod("10cos(x - 1) - x ^2 + 2x -1", 0.001,2.4).getLast()[0]);
         assertEquals(2.379,res,0.001);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("x^2 - 4", 0.001,1.5).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("x^2 - 4", 0.001,1.5).getLast()[0]);
         assertEquals(2,res,0.001);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("sin(x)", 0.01,3).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("sin(x)", 0.01,3).getLast()[0]);
         assertEquals(3.14,res,0.01);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("e^x - 2", 0.001,0.5).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("e^x - 2", 0.001,0.5).getLast()[0]);
         assertEquals(0.6931,res,0.001);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("x^2 - 4", 0.001,1.5).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("x^2 - 4", 0.001,1.5).getLast()[0]);
         assertEquals(2,res,0.001);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("x^3 + x - 1", 0.001,0.7).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("x^3 + x - 1", 0.001,0.7).getLast()[0]);
         assertEquals(0.6823,res,0.001);
 
-        res = Double.valueOf(NewtonMethod.newtonMethod("cos(x) - x", 0.001,0.5).getLast()[0]);
+        res = Double.valueOf(Methods.newtonMethod("cos(x) - x", 0.001,0.5).getLast()[0]);
         assertEquals(0.7391,res,0.001);
     }
 

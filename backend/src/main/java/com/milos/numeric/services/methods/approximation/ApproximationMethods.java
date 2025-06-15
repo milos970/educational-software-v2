@@ -1,7 +1,6 @@
-package com.milos.numeric.services.methods;
+package com.milos.numeric.services.methods.approximation;
 
 import org.decimal4j.util.DoubleRounder;
-import org.hibernate.AssertionFailure;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
