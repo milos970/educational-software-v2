@@ -68,8 +68,6 @@ public class PersonalInfoService
     }
 
 
-
-
     public Optional<PersonalInfo> findByAuthority(Authority authority)
     {
         return this.personalInfoRepository.findByAuthority(authority.name());

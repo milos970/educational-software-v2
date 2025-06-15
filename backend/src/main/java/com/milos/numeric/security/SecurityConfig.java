@@ -45,15 +45,16 @@ public class SecurityConfig
                         .requestMatchers(mvcMatcherBuilderL.pattern("/create-token/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilderM.pattern("/confirm-email")).permitAll()
                         .requestMatchers(toH2Console()).permitAll()
-                .requestMatchers(mvcMatcherAdmin.pattern("/employee/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
-                .requestMatchers(mvcMatcherStudent.pattern("/student/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAuthority('STUDENT')"))
+                .requestMatchers(mvcMatcherAdmin.pattern("/system")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
+                .requestMatchers(mvcMatcherStudent.pattern("/profile")).access(new WebExpressionAuthorizationManager("isAuthenticated() and hasAuthority('STUDENT')"))
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/login").permitAll().defaultSuccessUrl("/home", true));
+                        .loginPage("/login").permitAll().defaultSuccessUrl("/methods", true));
         http.authenticationManager(new CustomAuthenticationManager(Arrays.asList(usernameAuthenticationProvider(), ldapAuthenticationProvider())));
 
         return http.build();
     }
+
 
 
 

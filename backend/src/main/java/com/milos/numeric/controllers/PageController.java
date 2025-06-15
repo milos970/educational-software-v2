@@ -1,19 +1,16 @@
 package com.milos.numeric.controllers;
 
-import com.milos.numeric.dtos.PersonalInfoDto;
 import com.milos.numeric.email.EmailServiceImpl;
 import com.milos.numeric.entities.*;
-import com.milos.numeric.security.MyUserDetails;
 import com.milos.numeric.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,16 +19,10 @@ public class PageController {
 
     private final PersonalInfoService personalInfoService;
     private final StudentService studentService;
-
     private final EmployeeService employeeService;
-
     private final EmailServiceImpl emailService;
-
     private final MaterialService materialService;
-
     private final SystemSettingsService systemSettingsService;
-
-
 
 
     @Autowired
@@ -45,79 +36,35 @@ public class PageController {
     }
 
 
-    @GetMapping("/home")
-    @ResponseBody
-    public String home()
+    @GetMapping("/methods")
+    public String methods(@AuthenticationPrincipal UserDetails myUserDetails, Model model)
     {
-        return "WELCOME";
-    }
-
-
-    @GetMapping("/success")
-    @ResponseBody
-    public String success() {
-        return "SUCCESS!";
-    }
-
-
-    @GetMapping("/failure")
-    @ResponseBody
-    public String failure() {
-        return "FAILURE!";
-    }
-
-    @GetMapping("student/schedule/page")
-    public String studentSchedulePage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
         String username = myUserDetails.getUsername();
+        Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
+        PersonalInfo personalInfo = optionalPersonalInfo.get();
+
+        model.addAttribute("personalInfo", personalInfo);
+
+        return "index";
+    }
+
+    @GetMapping("/profile")
+    public String studentProfilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername();
         Optional<Student> optionalStudent = this.studentService.findByUsername(username);
 
         Student student = optionalStudent.get();
 
         model.addAttribute("student", student);
-
-        if (student.getPersonalInfo().getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
-
-        Optional<SystemSettings> optional = this.systemSettingsService.findFirst();
-
-        if (optional.isEmpty()) {
-
-        }
-
-        SystemSettings systemSettings = optional.get();
-
-        model.addAttribute("systemSettings", systemSettings);
-
-
-        return "pages/main/schedule";
-    }
-
-    @GetMapping("student/profile/page")
-    public String studentProfilePage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-        String username = myUserDetails.getUsername();
-        Optional<Student> optionalStudent = this.studentService.findByUsername(username);
-
-        Student student = optionalStudent.get();
-
-        model.addAttribute("student", student);
-
-        if (student.getPersonalInfo().getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
 
 
         return "pages/main/profile";
     }
 
 
-    @GetMapping("employee/system/page")
-    public String systemPage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-        String username = myUserDetails.getUsername();
+    @GetMapping("system")
+    public String systemPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername();
 
         Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
         PersonalInfo personalInfo = optionalPersonalInfo.get();
@@ -139,13 +86,9 @@ public class PageController {
     }
 
 
-
-
-
-
-    @GetMapping("employee/students/page")
-    public String studentsPage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-        String username = myUserDetails.getUsername();
+    @GetMapping("students")
+    public String studentsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername();
         Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
 
         if (optionalPersonalInfo.isEmpty()) {
@@ -157,21 +100,15 @@ public class PageController {
         model.addAttribute("personalInfo", personalInfo);
 
         List<Student> students = this.studentService.findAllByPointsAsc();
-
         model.addAttribute("students", students);
 
-        if (personalInfo.getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
 
         return "pages/main/students";
     }
 
-    @GetMapping("employee/employees/page")
-    public String employeesPage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
-        String username = myUserDetails.getUsername();
+    @GetMapping("employees")
+    public String employeesPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String username = userDetails.getUsername();
         Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
 
         if (optionalPersonalInfo.isEmpty()) {
@@ -186,18 +123,12 @@ public class PageController {
 
         model.addAttribute("employees", employees);
 
-        if (personalInfo.getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
-
         return "pages/main/employees";
     }
 
 
-    @GetMapping("person/material/page")
-    public String materialsPage(@AuthenticationPrincipal MyUserDetails myUserDetails, Model model) {
+    @GetMapping("materials")
+    public String materialsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         List<Material> materials = this.materialService.findAll();
 
         if (materials.isEmpty()) {
@@ -206,7 +137,7 @@ public class PageController {
 
         model.addAttribute("materials", materials);
 
-        String username = myUserDetails.getUsername();
+        String username = userDetails.getUsername();
         Optional<PersonalInfo> optionalPersonalInfo = this.personalInfoService.findByUsername(username);
 
         if (optionalPersonalInfo.isEmpty()) {
@@ -217,44 +148,17 @@ public class PageController {
 
         model.addAttribute("personalInfo", personalInfo);
 
-        if (personalInfo.getGender().name().equals("FEMALE")) {
-            model.addAttribute("imagePath", "/images/faces-clipart/female.png");
-        } else {
-            model.addAttribute("imagePath", "/images/faces-clipart/male.png");
-        }
 
 
         return "pages/main/materials";
     }
 
 
-
-
-
-    @GetMapping("login")
-    public String login()
+    @GetMapping("/login")
+    public String loginPage()
     {
-        return "pages/alt/sign-in";
+         return "pages/alt/login";
     }
-
-
-
-
-    @GetMapping("sign-up/page")
-    public String signUpPage(@ModelAttribute("error") String error, Model model)
-    {
-        if (error != null)
-        {
-            model.addAttribute("error", error);
-        }
-        model.addAttribute("personalInfoDto", new PersonalInfoDto());
-
-        return "pages/alt/sign-up";
-    }
-
-
-
-
 
 
 

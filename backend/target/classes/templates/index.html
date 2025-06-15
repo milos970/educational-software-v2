@@ -48,7 +48,7 @@
                 <div class="profile-desc">
                     <div class="profile-pic">
                         <div class="count-indicator">
-                            <img class="img-xs rounded-circle" th:src="@{${imagePath}}" alt="avatar">
+                            <img class="img-xs rounded-circle" th:src="${(personalInfo.gender.name() == 'FEMALE') ? '/images/faces-clipart/female.png' : '/images/faces-clipart/male.png'}" alt="avatar"/>
                             <span class="count bg-success"></span>
                         </div>
                         <div class="profile-name">
@@ -91,15 +91,15 @@
                 <div class="collapse" id="ui-basic">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a class="nav-link" href=""
-                                                th:href="@{/employee/students/page}">Študenti</a></li>
-                        <li class="nav-item"><a class="nav-link" href="" th:href="@{'/employee/employees/page'}">Zamestnanci</a>
+                                                th:href="@{/students}">Študenti</a></li>
+                        <li class="nav-item"><a class="nav-link" href="" th:href="@{'/employees}">Zamestnanci</a>
                         </li>
                     </ul>
                 </div>
             </li>
 
             <li class="nav-item menu-items">
-                <a class="nav-link" href="" th:href="@{'/person/material/page'}">
+                <a class="nav-link" href="" th:href="@{'/materials'}">
               <span class="menu-icon">
                 <i class="mdi mdi-library-books"></i>
               </span>
@@ -136,7 +136,7 @@
             </li>
 
             <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
-                <a class="nav-link" th:href="@{'/student/profile/page'}">
+                <a class="nav-link" th:href="@{'/profile'}">
               <span class="menu-icon">
                 <i class="mdi mdi-account-card-details">
 
@@ -181,7 +181,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                             <div class="navbar-profile">
-                                <img class="img-xs rounded-circle" th:src="@{${imagePath}}" alt="">
+                                <img class="img-xs rounded-circle" th:src="${(personalInfo.gender.name() == 'FEMALE') ? '/images/faces-clipart/female.png' : '/images/faces-clipart/male.png'}" alt="">
                                 <p class="mb-0 d-none d-sm-block navbar-profile-name"
                                    th:text="${personalInfo.name + ' ' + personalInfo.surname}"></p>
                                 <i class="mdi mdi-menu-down d-none d-sm-block"></i>

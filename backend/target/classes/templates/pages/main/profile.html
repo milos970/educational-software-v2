@@ -124,7 +124,7 @@
             </li>
 
             <li class="nav-item menu-items">
-                <a class="nav-link" th:href="@{/student/profile/page}">
+                <a class="nav-link" th:href="@{/profil}">
               <span class="menu-icon">
                 <i class="mdi mdi-account-card-details">
 
@@ -162,8 +162,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                             <div class="navbar-profile">
-                                <img th:if="${student.personalInfo.getGender().name() eq 'MALE'}" th:src="@{/images/faces-clipart/male.png}" alt="Avatar" />
-                                <img th:if="${student.personalInfo.getGender().name() eq 'FEMALE'}" th:src="@{/images/faces-clipart/female.png}" alt="Avatar" />
+                                <img class="img-xs rounded-circle" th:src="${(student.personalInfo.gender.name() == 'FEMALE') ? '/images/faces-clipart/female.png' : '/images/faces-clipart/male.png'}" alt="avatar"/>
                                 <p class="mb-0 d-none d-sm-block navbar-profile-name"
                                    th:text="${student.personalInfo.name + ' ' + student.personalInfo.surname}"></p>
                                 <i class="mdi mdi-menu-down d-none d-sm-block"></i>

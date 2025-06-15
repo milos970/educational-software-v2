@@ -22,6 +22,7 @@ public class OnlyUsernameAuthenticationProvider implements AuthenticationProvide
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
         String username = authentication.getName();
+        System.out.println("Authenticating " + username);
 
         try
         {

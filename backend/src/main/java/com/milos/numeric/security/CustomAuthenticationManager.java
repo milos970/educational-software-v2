@@ -5,9 +5,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -18,7 +21,6 @@ public class CustomAuthenticationManager implements AuthenticationManager
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException
     {
-        System.out.println("Manager is being called");
         Authentication auth = null;
 
         try {
@@ -29,11 +31,15 @@ public class CustomAuthenticationManager implements AuthenticationManager
         }
 
         try {
-            auth =  providers.get(1).authenticate(auth);
+            providers.get(1).authenticate(auth);
         } catch (AuthenticationException e) {
             auth.setAuthenticated(false);
             return auth;
         }
+
+
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
         return auth;
 
