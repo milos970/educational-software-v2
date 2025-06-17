@@ -15,71 +15,43 @@ public final class ApproximationMethods
     private ApproximationMethods() {
         throw new AssertionError();
     }
-    public static String lagrange(double[] nodes)
-    {
 
+    public static String lagrange(double[] x, double[] y) {
+        StringBuilder polynome = new StringBuilder();
 
-        String equation = "";
-        boolean first = true;
-        for (int i = 0; i < nodes.length; i+=2)
-        {
-            String part = "";
-            double menovatel = 1;
-            for (int k = 0; k < nodes.length; k+=2)
-            {
+        for (int i = 0; i < x.length; ++i) {
+            double denominator = 1.0;
+            StringBuilder term = new StringBuilder();
 
-                if (i == k)
-                {
-                    continue;
-                }
+            for (int k = 0; k < x.length; ++k) {
+                if (i == k) continue;
 
+                double diff = x[i] - x[k];
+                denominator *= diff;
 
-
-
-                if (nodes[k] > 0)
-                {
-                    part += "(x - " + convert(nodes[k]) + ")";
-                } else
-                {
-                    part += "(x + " + convert(-1 * nodes[k]) + ")";
-                }
-
-
-                menovatel *= (nodes[i] - nodes[k]);
-
+                term.append("(x ");
+                term.append(x[k] >= 0 ? "- " : "+ ");
+                term.append(convert(Math.abs(x[k])));
+                term.append(")");
             }
 
-            menovatel = 1/ menovatel;
+            double coefficient = y[i] / denominator;
 
-            if (first)
-            {
+            if (coefficient == 0) continue;
 
-                part = convert(nodes[i + 1] * menovatel)  + part;
-                equation += part;
-                first = false;
-            } else
-            {
-                if (nodes[i + 1] * menovatel > 0)
-                {
-                    part = "+" + convert(nodes[i + 1] * menovatel) + part;
-                } else
-                {
-                    part = convert(nodes[i + 1] * menovatel) + part;
-                }
-
-                equation += part;
+            if (coefficient > 0 && polynome.length() > 0) {
+                polynome.append(" + ");
+            } else if (coefficient < 0) {
+                polynome.append(" - ");
+                coefficient = -coefficient;
             }
 
-
+            polynome.append(convert(coefficient)).append(term);
         }
 
-
-        return equation;
-
-
-
-
+        return polynome.toString();
     }
+
 
 
     public static String newton(double[][] nodes)
@@ -89,7 +61,6 @@ public final class ApproximationMethods
             for (int i = 0; i < nodes.length; ++i)
             {
                 double cislo = dividedDifference(nodes, 0,i);
-
 
                 if (i == 0)
                 {
@@ -191,6 +162,8 @@ public final class ApproximationMethods
     {
         return ((int)value == value ? format.format(value) : String.valueOf(DoubleRounder.round(value, ROUND)));
     }
+
+
     private static String cramer(int option, List<Double> coeficients)
     {
         double A = coeficients.get(0) * coeficients.get(3) -  coeficients.get(1) * coeficients.get(1);
@@ -210,4 +183,5 @@ public final class ApproximationMethods
         return "" + convert((A1 / A)) + " +" + convert((A2 / A)) + "x";
 
     }
+
 }

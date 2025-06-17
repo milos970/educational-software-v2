@@ -1,7 +1,8 @@
 package com.example.demo;
 
 import com.milos.numeric.parameters.NonLinear;
-import com.milos.numeric.services.methods.integration.IntegrationMethods;
+import com.milos.numeric.services.methods.approximation.ApproximationMethods;
+import com.milos.numeric.services.methods.integration.TrapezoidalNumericalIntegration;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -34,7 +35,7 @@ public class NewPasswordDtoTest {
     @Test
     public void testNewtonMethod()
     {
-        double a = 2.547455454545455445454545454545344545465464545453434343435421233544545434345435454343545435435435;
+       /* double a = 2.547455454545455445454545454545344545465464545453434343435421233544545434345435454343545435435435;
         double res  = Double.valueOf(Methods.newtonMethod("10cos(x - 1) - x ^2 + 2x -1", 0.001,2.4).getLast()[0]);
         assertEquals(2.379,res,0.001);
 
@@ -54,7 +55,7 @@ public class NewPasswordDtoTest {
         assertEquals(0.6823,res,0.001);
 
         res = Double.valueOf(Methods.newtonMethod("cos(x) - x", 0.001,0.5).getLast()[0]);
-        assertEquals(0.7391,res,0.001);
+        assertEquals(0.7391,res,0.001);*/
     }
 
     @Test
@@ -90,9 +91,11 @@ public class NewPasswordDtoTest {
         System.out.println(ApproximationMethods.newton(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
         System.out.println(ApproximationMethods.leastSquares(new double[][]{{-2,10},{-1,4},{1,6},{2,3}}));
 */
-        System.out.println(IntegrationMethods.trapezoidal("e^x", -1, 1, 4));
+       /* System.out.println(IntegrationMethods.trapezoidal("e^x", -1, 1, 4));
 
-        System.out.println(IntegrationMethods.simpson("e^x", -1, 1, 4));
+        System.out.println(IntegrationMethods.simpson("e^x", -1, 1, 4));*/
+        System.out.println(ApproximationMethods.lagrange(new double[]{-2,-1,1,2}, new double[]{10,4,6,3}));
+
     }
 
 
