@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Prihlásenie</title>
+
+  <link rel="stylesheet" href="/static/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/static/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/my.css">
+
+</head>
+<body>
+<div class="container-scroller">
+  <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="row w-100 m-0">
+      <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+        <div class="card col-lg-4 mx-auto">
+          <div class="card-body px-5 py-5">
+            <h3 class="card-title text-left mb-3">Prihlásenie</h3>
+            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+              <div class="form-group">
+                <label>Meno*</label>
+                <input type="text" id="name-input" class="form-control p_input" style="color: white" name="username" formControlName="username">
+                <p class="error" id="name-input-error-hint"></p>
+              </div>
+
+              <div class="form-group">
+                <label>Heslo *</label>
+                <input type="password" id="password-input" class="form-control p_input" style="color: white" name="password" formControlName="password">
+                <p class="error" id="password-input-error-hint"></p>
+              </div>
+              <div class="form-group d-flex align-items-center justify-content-between">
+                <a  class="forgot-pass">Zabudnuté heslo</a>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" id="submit-button" class="btn btn-primary btn-block enter-btn">Prihlásiť</button>
+              </div>
+
+            </form>
+            <div class="text-center">
+              <form action="sign-up/page" method="GET">
+                <button onclick="saveToFile()" type="submit" class="btn btn-primary btn-block enter-btn" >Registrovať</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
