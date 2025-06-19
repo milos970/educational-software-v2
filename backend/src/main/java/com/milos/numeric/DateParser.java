@@ -5,10 +5,15 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.Date;
 
 @Component
-public class DateParser
+public final class DateParser
 {
+    private DateParser() {
+        throw new AssertionError();
+    }
+
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter
             .ofPattern("dd.MM.uuuu HH:mm")
             .withResolverStyle(ResolverStyle.STRICT);

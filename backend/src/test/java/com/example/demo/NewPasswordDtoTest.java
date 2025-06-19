@@ -1,8 +1,6 @@
 package com.example.demo;
 
 import com.milos.numeric.parameters.NonLinear;
-import com.milos.numeric.services.methods.approximation.ApproximationMethods;
-import com.milos.numeric.services.methods.integration.TrapezoidalNumericalIntegration;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -94,8 +92,9 @@ public class NewPasswordDtoTest {
        /* System.out.println(IntegrationMethods.trapezoidal("e^x", -1, 1, 4));
 
         System.out.println(IntegrationMethods.simpson("e^x", -1, 1, 4));*/
-        System.out.println(ApproximationMethods.lagrange(new double[]{-2,-1,1,2}, new double[]{10,4,6,3}));
-
+        //System.out.println(ApproximationMethods.lagrange(new double[]{-2,-1,1,2}, new double[]{10,4,6,3}));
+       // System.out.println(ApproximationMethods.newton(new double[]{-2,-1,1,2}, new double[]{10,4,6,3}));
+        System.out.println(ApproximationMethods.leastSquares(new double[]{-2,-1,1,2}, new double[]{10,4,6,3}));
     }
 
 
