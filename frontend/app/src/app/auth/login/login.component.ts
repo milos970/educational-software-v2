@@ -18,7 +18,11 @@ profileForm = new FormGroup
 
 
 onSubmit() {
-    console.warn(this.profileForm.value);
+    const username = this.profileForm.get('username')?.value;
+      const password = this.profileForm.get('password')?.value;
+
+      console.log('Meno:', username);
+      console.log('Heslo:', password);
   }
 
 }
