@@ -10,6 +10,8 @@ import {FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
 })
 export class LoginComponent {
 
+  constructor(private authService: AuthService) {}
+
 profileForm = new FormGroup
 ({
     username: new FormControl(''),
@@ -18,11 +20,10 @@ profileForm = new FormGroup
 
 
 onSubmit() {
-    const username = this.profileForm.get('username')?.value;
+      const username = this.profileForm.get('username')?.value;
       const password = this.profileForm.get('password')?.value;
 
-      console.log('Meno:', username);
-      console.log('Heslo:', password);
+      this.authService.login(username, password);
   }
 
 }
