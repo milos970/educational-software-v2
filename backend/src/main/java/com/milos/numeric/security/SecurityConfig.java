@@ -2,184 +2,78 @@ package com.milos.numeric.security;
 
 
 import com.milos.numeric.services.MyDatabaseUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.BaseLdapPathContextSource;
+import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.ldap.LdapBindAuthenticationManagerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
-import org.springframework.security.ldap.authentication.BindAuthenticator;
-import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
-import org.springframework.security.ldap.search.FilterBasedLdapUserSearch;
+import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
-
-import java.security.SecureRandom;
-import java.util.Arrays;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig
 {
 
-   /* public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderB = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderC = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderD = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderF = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderG = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderH = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderI = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderL = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderM = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherBuilderO = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherAdmin = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherStudent = new MvcRequestMatcher.Builder(introspector);
-        http.csrf(Customizer.withDefaults())
-                .authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/css/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderB.pattern("/js/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderF.pattern("/scss/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderG.pattern("/vendor/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderH.pattern("/vendors/**")).permitAll()
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderL.pattern("/create-token/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderM.pattern("/confirm-email")).permitAll()
-                        .requestMatchers(toH2Console()).permitAll()
-                        .requestMatchers(mvcMatcherBuilderO.pattern("/person/create")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderC.pattern("/file/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderD.pattern("/sign-up/page")).permitAll()
-                        .requestMatchers(mvcMatcherBuilderI.pattern("/forget-password-page")).permitAll()
-                        .requestMatchers(mvcMatcherAdmin.pattern("/employee/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
-                        .requestMatchers(mvcMatcherStudent.pattern("/student/**")).access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAuthority('STUDENT')"))
-
-                        .anyRequest().fullyAuthenticated()
-                ).headers(headers -> headers.frameOptions().disable())
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).disable())
-
-                .formLogin(form -> form.successHandler(authenticationSuccessHandler())
-                .loginPage("/login")
-
-                .permitAll())
-                .logout((logout) -> logout.logoutUrl("/logout").logoutSuccessUrl("/login"));
-
-        http.authenticationProvider(ldapAuthenticationProvider());
-
-
-        return http.build();
-    }*/
-
-
-
-
-
-    /*@Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception
+    {
+        MvcRequestMatcher.Builder mvc = new MvcRequestMatcher.Builder(introspector);
 
         http
-                .authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/failure")).permitAll()
-                        .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(mvc.pattern("api/auth/teacher")).hasRole("TEACHERS")
+                        .requestMatchers(mvc.pattern("api/auth/student")).hasRole("STUDENTS")
+                        .anyRequest().authenticated()
                 )
-                .formLogin().failureHandler(authenticationFailureHandler()).successHandler(authenticationSuccessHandler())
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationManager(customAuthenticationManager())
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }*/
-
-
-    /*@Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        MvcRequestMatcher.Builder mvcMatcherBuilderA = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherAdmin = new MvcRequestMatcher.Builder(introspector);
-        MvcRequestMatcher.Builder mvcMatcherStudent = new MvcRequestMatcher.Builder(introspector);
-
-        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(mvcMatcherBuilderA.pattern("/failure")).permitAll()
-                        .requestMatchers(mvcMatcherAdmin.pattern("/employee/**"))
-                        .access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.enabled == true and hasAnyAuthority('TEACHER', 'EMPLOYEE')"))
-                        .anyRequest().authenticated() // Všetky requesty musia byť autentifikované
-                ) .authenticationManager(customAuthenticationManager());
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
-    }*/
 
-    @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
-        http.csrf().disable().authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(customAuthenticationProvider()
-                );
-        http.httpBasic();
-        return http.build();
     }
 
-
-
-
-
-    /*public AuthenticationManager customAuthenticationManager()
-    {
-        return new CustomAuthenticationManager(Arrays.asList(ldapAuthenticationProvider(),customAuthenticationProvider()));
-    }*/
-
-
-
-    public AuthenticationProvider customAuthenticationProvider()
-    {
-        return new CustomAuthenticationProvider(userDetailsService());
+    @Bean
+    public LdapTemplate ldapTemplate() {
+        return new LdapTemplate(contextSource());
     }
 
 
     @Bean
-    public LdapAuthenticationProvider ldapAuthenticationProvider()
-    {
-        return new LdapAuthenticationProvider(authenticator());
-    }
-
-
-    @Bean
-    public BindAuthenticator authenticator()
-    {
-        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch("ou=people", "(uid={0})", contextSource());
-        BindAuthenticator authenticator = new BindAuthenticator(contextSource());
-        authenticator.setUserSearch(search);
-        return authenticator;
+    public LdapContextSource contextSource() {
+        LdapContextSource ldapContextSource = new LdapContextSource();
+        ldapContextSource.setUrl("ldap://localhost:10389");
+        ldapContextSource.setUserDn("uid=admin,ou=system");
+        ldapContextSource.setPassword("secret");
+        return ldapContextSource;
     }
 
     @Bean
-    public DefaultSpringSecurityContextSource contextSource() {
-        return new DefaultSpringSecurityContextSource("ldap://localhost:8389/dc=springframework,dc=org");
+    public AuthenticationManager authenticationManager(BaseLdapPathContextSource source) {
+        LdapBindAuthenticationManagerFactory factory = new LdapBindAuthenticationManagerFactory(source);
+        factory.setUserDnPatterns("cn={0},ou=users,ou=system");
+
+        DefaultLdapAuthoritiesPopulator authoritiesPopulator =
+                new DefaultLdapAuthoritiesPopulator(source, "ou=groups,ou=system");
+
+        authoritiesPopulator.setGroupSearchFilter("member={0}");
+
+        factory.setLdapAuthoritiesPopulator(authoritiesPopulator);
+
+        return factory.createAuthenticationManager();
     }
 
 
-    @Bean
-    public PasswordEncoder encoder()
-    {
-        return new BCryptPasswordEncoder(12, new SecureRandom());
-    }
+
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler()
@@ -192,7 +86,6 @@ public class SecurityConfig
     {
         return new CustomAuthenticationSuccessHandler();
     }
-
 
     @Bean
     public UserDetailsService userDetailsService()

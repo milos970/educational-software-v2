@@ -8,4 +8,4 @@ insert into employee (id, person_id) values (225, 5);
 insert into employee (id, person_id) values (222, 0);
 
 insert into system_settings(id,allowed_absents, employee_id, class_date, number_of_days, uploaded_file)
-values (0,2,222,'28.12.2024 14:15',0,false);
+values (0,2,222,'28.12.2025 14:15',0,false);

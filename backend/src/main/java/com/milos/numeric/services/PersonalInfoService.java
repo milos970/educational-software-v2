@@ -40,7 +40,6 @@ public class PersonalInfoService
 
     private final EmailServiceImpl emailService;
 
-    private final  PasswordEncoder passwordEncoder;
 
 
 
@@ -50,13 +49,11 @@ public class PersonalInfoService
 
 
     @Autowired
-    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService, PasswordEncoder passwordEncoder) {
+    public PersonalInfoService(PersonalInfoRepository personalInfoRepository, SystemSettingsService systemSettingsService, Validator validator, EmailServiceImpl emailService) {
         this.personalInfoRepository = personalInfoRepository;
         this.systemSettingsService = systemSettingsService;
         this.validator = validator;
         this.emailService = emailService;
-        this.passwordEncoder = passwordEncoder;
-
     }
 
     public Optional<String> findUsernameByAuthorityTeacher()//OK
