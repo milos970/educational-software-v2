@@ -38,7 +38,8 @@
         <li>Spring LDAP</li>
       </ul>
     </li>
-    <li>JWT</l
+    <li>JWT</l>
+    <li>MySQL</li>
 
 
 </td><td valign="top" width="33%">
