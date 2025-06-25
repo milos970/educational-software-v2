@@ -8,7 +8,7 @@
   - Spring Data JPA + Hibernate
   - Spring Validation
   - Spring Mail
-  - Spring LDAP + UnboundID SDK
+  - Spring LDAP
 - **JWT**
 - **MapStruct** (DTO ↔ Entity mapping)
 - **Lombok**
