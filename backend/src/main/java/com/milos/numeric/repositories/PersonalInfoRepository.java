@@ -37,6 +37,5 @@ public interface PersonalInfoRepository extends JpaRepository<PersonalInfo, Long
     List<PersonalInfo> findAll(Sort sort);
 
 
-
-
+    boolean existsByUsername(String username);
 }

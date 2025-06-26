@@ -1,8 +1,8 @@
 insert into personal_info (id,name,surname,username, personal_number, email, gender, authority, enabled)
-values (0,'Ema','Mrkvičková','ema.mrkvickova', '56478', 'ema.mrkvičkova@fri.uniza.sk','FEMALE','TEACHER', true);
+values (0,'lydia','gabrisova','lydia', '56478', 'ema.mrkvičkova@fri.uniza.sk','FEMALE','TEACHER', true);
 
 insert into personal_info (id,name,surname,username, personal_number, email,  gender, authority, enabled)
-values (5,'Zuzana','Malá','zuzana.mala', '12345', 'zuzana.mala@fri.uniza.sk', 'FEMALE','EMPLOYEE', true);
+values (5,'milos','lukacik','milos', '12345', 'zuzana.mala@fri.uniza.sk', 'FEMALE','STUDENT', true);
 
 insert into employee (id, person_id) values (225, 5);
 insert into employee (id, person_id) values (222, 0);

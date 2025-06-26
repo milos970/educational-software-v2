@@ -8,6 +8,8 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.BaseLdapPathContextSource;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +21,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -58,18 +62,8 @@ public class SecurityConfig
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(BaseLdapPathContextSource source) {
-        LdapBindAuthenticationManagerFactory factory = new LdapBindAuthenticationManagerFactory(source);
-        factory.setUserDnPatterns("cn={0},ou=users,ou=system");
-
-        DefaultLdapAuthoritiesPopulator authoritiesPopulator =
-                new DefaultLdapAuthoritiesPopulator(source, "ou=groups,ou=system");
-
-        authoritiesPopulator.setGroupSearchFilter("member={0}");
-
-        factory.setLdapAuthoritiesPopulator(authoritiesPopulator);
-
-        return factory.createAuthenticationManager();
+    public AuthenticationProvider authenticationProvider() {
+        return new CombinedLdapDbAuthenticationProvider(ldapTemplate());
     }
 
 
