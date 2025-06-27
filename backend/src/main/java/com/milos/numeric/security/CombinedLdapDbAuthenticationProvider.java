@@ -10,20 +10,19 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import java.util.List;
-import java.util.Optional;
 
 public class CombinedLdapDbAuthenticationProvider implements AuthenticationProvider {
 
     private final LdapTemplate ldapTemplate;
+
     @Autowired
-    private  PersonalInfoRepository userRepository; // Tvoja JPA repository
+    private  PersonalInfoRepository userRepository;
 
     public CombinedLdapDbAuthenticationProvider(LdapTemplate ldapTemplate) {
         this.ldapTemplate = ldapTemplate;
