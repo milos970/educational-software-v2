@@ -1,4 +1,4 @@
-# 📚 Edukačný software V2
+# 📚 Educational Software V2
 ## 📝 Description
 Modification of the bachelor's thesis project for deployment on the university server in the summer semester of 2026 as a teaching aid for the Numerical Methods course.
 
