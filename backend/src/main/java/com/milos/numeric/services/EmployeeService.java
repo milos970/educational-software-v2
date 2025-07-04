@@ -1,14 +1,13 @@
 package com.milos.numeric.services;
 
-import com.milos.numeric.Authority;
 import com.milos.numeric.entities.Employee;
-import com.milos.numeric.entities.PersonalInfo;
+import com.milos.numeric.exceptions.StudentNotFoundException;
 import com.milos.numeric.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeService
@@ -22,44 +21,27 @@ public class EmployeeService
 
 
 
-    public long count() {
-        return this.employeeRepository.count();
-    }
-    public void createEmployee(PersonalInfo personalInfo)
+    public void updateAuthority(Long id)
     {
-        Employee employee = new Employee();
-        employee.setPersonalInfo(personalInfo);
-        this.employeeRepository.save(employee);
-    }
-    public Optional<Employee> findById(Long id)
-    {
-        return this.employeeRepository.findById(id);
+
     }
 
-    public boolean existsByUsername(String username)
-    {
-        return this.employeeRepository.countByUsername(username) == 1;
-    }
-    public Optional<Employee> findByUsername(String username)
-    {
-        return this.employeeRepository.findByUsername(username);
+    public Employee findById(Long id) {
+        return this.employeeRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
     }
 
+    public void deleteStudent(Long id) {
+        Employee employee = this.findById(id);
+        this.employeeRepository.delete(employee);
+    }
 
-    public List<Employee> findAll()
-    {
+    public List<Employee> findAll() {
         return this.employeeRepository.findAll();
     }
 
-    public void save(Employee employee)
-    {
-        this.employeeRepository.save(employee);
-    }
-
-
-    public void deleteById(Long id)
-    {
-        this.employeeRepository.deleteById(id);
+    public void deleteAll() {
+        this.employeeRepository.deleteAll();
     }
 
 

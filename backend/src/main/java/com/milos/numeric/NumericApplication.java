@@ -1,6 +1,5 @@
 package com.milos.numeric;
 
-import com.milos.numeric.services.SystemSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
