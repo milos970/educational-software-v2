@@ -25,10 +25,10 @@ public class Student
 
     @Min(value = 0, message = "Value is less than 0!")
     @Max(value = 13, message = "Value is more than 13!")
-    private int absents;
+    private int absences;
 
-    @OneToOne(targetEntity = PersonalInfo.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(nullable = false, name = "person_id")
-    private PersonalInfo personalInfo;
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
 }

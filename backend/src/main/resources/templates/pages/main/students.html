@@ -52,8 +52,8 @@
                         </div>
                         <div class="profile-name">
                             <h5 class="mb-0 font-weight-normal" th:text="${personalInfo.name + ' ' + personalInfo.surname}"></h5>
-                            <span style="color: whitesmoke" th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER}">Vyučujúci</span>
-                            <span style="color: whitesmoke" th:if="${personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}">Zamestnanec</span>
+                            <span style="color: whitesmoke" th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER}">Vyučujúci</span>
+                            <span style="color: whitesmoke" th:if="${personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}">Zamestnanec</span>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
             </li>
 
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}" class="nav-item menu-items">
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}" class="nav-item menu-items">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-icon">
                 <i class="mdi mdi-account-multiple"></i>
@@ -98,7 +98,7 @@
             </li>
 
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
                 <a class="nav-link" th:href="@{/person/chat/page}">
               <span class="menu-icon">
                 <i class="mdi mdi-message-text">
@@ -112,7 +112,7 @@
             </li>
 
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}" class="nav-item menu-items">
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}" class="nav-item menu-items">
                 <a class="nav-link" th:href="@{/employee/system/page}">
               <span class="menu-icon">
                 <i class="mdi mdi-wrench">
@@ -208,7 +208,7 @@
                                             <th style="color: whitesmoke">Osobné číslo</th>
                                             <th style="color: whitesmoke">Email</th>
                                             <th style="color: whitesmoke">Body</th>
-                                            <th style="color: whitesmoke" th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER}"></th>
+                                            <th style="color: whitesmoke" th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER}"></th>
                                             <th style="color: whitesmoke">Absencie</th>
                                             <th style="color: whitesmoke"></th>
                                             <th style="color: whitesmoke"></th>
@@ -229,7 +229,7 @@
                                             <td><span th:text="${student.personalInfo.personalNumber}"></span></td>
                                             <td><span th:text="${student.personalInfo.email}"></span></td>
                                             <td ><span th:id="'points-' + ${student.id}" th:text="${student.getPoints()}"></span></td>
-                                            <td th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER}"><span>
+                                            <td th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER}"><span>
                                                 <div class="input-group">
                         <input type="number" min="0" max="100"   class="form-control" aria-label="Recipient's username" th:id="'points-input-' + ${student.id}"
                                aria-describedby="basic-addon2">
@@ -238,7 +238,7 @@
                         </div>
                       </div></span></td>
                                             <td ><span th:id="'absents-' + ${student.id}" th:text="${student.getAbsents()}"></span></td>
-                                            <td th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER}"><span> <div class="input-group">
+                                            <td th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER}"><span> <div class="input-group">
                         <input type="number" min="0" max="13"  class="form-control" aria-label="Recipient's username" th:id="'absents-input-' + ${student.id}"
                                aria-describedby="basic-addon2">
                         <div class="input-group-append">

@@ -1,5 +1,6 @@
 package com.milos.numeric.controllers;
 
+import com.milos.numeric.Role;
 import com.milos.numeric.entities.Employee;
 import com.milos.numeric.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class EmployeeController {
 
 
     @PatchMapping("/{id}")
-    public void updateAuthority(@RequestBody Long id) {
-
+    public void updateRole(@RequestBody Role role, @PathVariable Long id) {
+        this.employeeService.updateRole(id, role);
     }
 
 

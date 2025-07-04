@@ -3,7 +3,7 @@ package com.milos.numeric.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.milos.numeric.Authority;
+import com.milos.numeric.Role;
 import com.milos.numeric.Domain;
 import com.milos.numeric.Gender;
 import com.milos.numeric.dtos.PersonalInfoDto;
@@ -15,7 +15,6 @@ import com.opencsv.CSVReaderBuilder;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
@@ -58,19 +57,19 @@ public class PersonalInfoService
 
     public Optional<String> findUsernameByAuthorityTeacher()//OK
     {
-        return this.personalInfoRepository.findUsernameByAuthority(Authority.TEACHER.name());
+        return this.personalInfoRepository.findUsernameByAuthority(Role.TEACHER.name());
     }
 
-    public Optional<Authority> findAuthorityByUsername(String username)//OK
+    public Optional<Role> findAuthorityByUsername(String username)//OK
     {
         Optional<String> optional = this.personalInfoRepository.findAuthorityByUsername(username);
-        return Optional.of(Authority.valueOf(optional.get()));
+        return Optional.of(Role.valueOf(optional.get()));
     }
 
 
-    public Optional<PersonalInfo> findByAuthority(Authority authority)
+    public Optional<PersonalInfo> findByAuthority(Role role)
     {
-        return this.personalInfoRepository.findByAuthority(authority.name());
+        return this.personalInfoRepository.findByAuthority(role.name());
     }
 
     public Optional<PersonalInfo> findByUsername(String username)
@@ -151,17 +150,17 @@ public class PersonalInfoService
 
             if (this.personalInfoRepository.count() == 0)
             {
-                personalInfo.setAuthority(Authority.TEACHER);
+                personalInfo.setAuthority(Role.TEACHER);
 
             } else {
-                personalInfo.setAuthority(Authority.EMPLOYEE);
+                personalInfo.setAuthority(Role.EMPLOYEE);
             }
         }
 
         if (emailDomain.equals(Domain.STUDENT_DOMAIN.getDomain()))
         {
 
-            personalInfo.setAuthority(Authority.STUDENT);
+            personalInfo.setAuthority(Role.STUDENT);
         }
 
 

@@ -17,9 +17,9 @@ public class Employee
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(targetEntity = PersonalInfo.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(nullable = false, name = "person_id")
-    private PersonalInfo personalInfo;
+    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
 
 }

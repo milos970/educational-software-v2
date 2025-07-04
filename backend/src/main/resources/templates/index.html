@@ -55,11 +55,11 @@
                             <h5 class="mb-0 font-weight-normal"
                                 th:text="${personalInfo.name + ' ' + personalInfo.surname}"></h5>
                             <span style="color: whitesmoke"
-                                  th:if="${personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}">Študent</span>
+                                  th:if="${personalInfo.role == T(com.milos.numeric.Authority).STUDENT}">Študent</span>
                             <span style="color: whitesmoke"
-                                  th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER}">Vyučujúci</span>
+                                  th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER}">Vyučujúci</span>
                             <span style="color: whitesmoke"
-                                  th:if="${personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}">Zamestnanec</span>
+                                  th:if="${personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}">Zamestnanec</span>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
             </li>
 
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}"
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}"
                 class="nav-item menu-items">
                 <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                    aria-controls="ui-basic">
@@ -108,7 +108,7 @@
             </li>
 
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}"
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).STUDENT}"
                 class="nav-item menu-items">
                 <a class="nav-link" th:href="@{'/person/chat/page'}">
               <span class="menu-icon">
@@ -122,7 +122,7 @@
                 </a>
             </li>
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
                 <a class="nav-link" th:href="@{'/student/schedule/page'}">
               <span class="menu-icon">
                 <i class="mdi mdi-timetable">
@@ -135,7 +135,7 @@
                 </a>
             </li>
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).STUDENT}" class="nav-item menu-items">
                 <a class="nav-link" th:href="@{'/profile'}">
               <span class="menu-icon">
                 <i class="mdi mdi-account-card-details">
@@ -148,7 +148,7 @@
                 </a>
             </li>
 
-            <li th:if="${personalInfo.authority == T(com.milos.numeric.Authority).TEACHER || personalInfo.authority == T(com.milos.numeric.Authority).EMPLOYEE}"
+            <li th:if="${personalInfo.role == T(com.milos.numeric.Authority).TEACHER || personalInfo.role == T(com.milos.numeric.Authority).EMPLOYEE}"
                 class="nav-item menu-items">
                 <a class="nav-link" th:href="@{'/employee/system/page'}">
               <span class="menu-icon">

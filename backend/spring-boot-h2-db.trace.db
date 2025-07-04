@@ -294,7 +294,7 @@ Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name
 	... 92 more
 2025-02-02 15:51:42 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Column count does not match; SQL statement:
-INSERT INTO personal_info (id, name, surname, username, email, gender, authority, enabled) SELECT 0, 'Lýdia', 'Gábrišová', 'lydia.gabrisova', '12345', 'lydia.gabrisova@fri.uniza.sk', 'FEMALE', 'TEACHER', true WHERE NOT EXISTS ( SELECT 1 FROM personal_info WHERE username = 'lydia.gabrisova' ) [21002-220]
+INSERT INTO personal_info (id, name, surname, username, email, gender, role, enabled) SELECT 0, 'Lýdia', 'Gábrišová', 'lydia.gabrisova', '12345', 'lydia.gabrisova@fri.uniza.sk', 'FEMALE', 'TEACHER', true WHERE NOT EXISTS ( SELECT 1 FROM personal_info WHERE username = 'lydia.gabrisova' ) [21002-220]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	at org.h2.message.DbException.get(DbException.java:223)

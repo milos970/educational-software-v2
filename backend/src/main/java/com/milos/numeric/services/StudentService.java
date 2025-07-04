@@ -51,7 +51,7 @@ public class StudentService
 
     public void updateAbsences(Long id, AbsencesUpdateDto dto) {
         Student student = this.findById(id);
-        student.setAbsents(student.getAbsents() + dto.getAbsences());
+        student.setAbsences(student.getAbsences() + dto.getAbsences());
         this.studentRepository.save(student);
     }
 
